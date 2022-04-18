@@ -31,56 +31,56 @@ GLuint Shader::loadShader(GLenum shaderType, std::string path) const
 
 Shader::Shader(std::string fragmentPath, std::string geometryPath, std::string vertexPath)
 {
-	shaderHandler = glCreateProgram();
-	fragmentHandler = loadShader(GL_FRAGMENT_SHADER, fragmentPath);
-	geometryHandler = loadShader(GL_GEOMETRY_SHADER, geometryPath);
-	vertexHandler = loadShader(GL_VERTEX_SHADER, vertexPath);
-	glAttachShader(shaderHandler, fragmentHandler);
-	glAttachShader(shaderHandler, geometryHandler);
-	glAttachShader(shaderHandler, vertexHandler);
-	glLinkProgram(shaderHandler);
+	_shaderHandler = glCreateProgram();
+	_fragmentHandler = loadShader(GL_FRAGMENT_SHADER, fragmentPath);
+	_geometryHandler = loadShader(GL_GEOMETRY_SHADER, geometryPath);
+	_vertexHandler = loadShader(GL_VERTEX_SHADER, vertexPath);
+	glAttachShader(_shaderHandler, _fragmentHandler);
+	glAttachShader(_shaderHandler, _geometryHandler);
+	glAttachShader(_shaderHandler, _vertexHandler);
+	glLinkProgram(_shaderHandler);
 	getLinkingError();
 }
 
 Shader::Shader(std::string fragmentPath, std::string vertexPath)
 {
-	shaderHandler = glCreateProgram();
-	fragmentHandler = loadShader(GL_FRAGMENT_SHADER, fragmentPath);
-	vertexHandler = loadShader(GL_VERTEX_SHADER, vertexPath);
-	glAttachShader(shaderHandler, fragmentHandler);
-	glAttachShader(shaderHandler, vertexHandler);
-	glLinkProgram(shaderHandler);
+	_shaderHandler = glCreateProgram();
+	_fragmentHandler = loadShader(GL_FRAGMENT_SHADER, fragmentPath);
+	_vertexHandler = loadShader(GL_VERTEX_SHADER, vertexPath);
+	glAttachShader(_shaderHandler, _fragmentHandler);
+	glAttachShader(_shaderHandler, _vertexHandler);
+	glLinkProgram(_shaderHandler);
 	getLinkingError();
 }
 
 Shader::~Shader()
 {
-	glDetachShader(shaderHandler, vertexHandler);
-	if (geometryHandler != -1)
+	glDetachShader(_shaderHandler, _vertexHandler);
+	if (_geometryHandler != -1)
 	{
-		glDetachShader(shaderHandler, geometryHandler);
+		glDetachShader(_shaderHandler, _geometryHandler);
 	}
-	glDetachShader(shaderHandler, fragmentHandler);
+	glDetachShader(_shaderHandler, _fragmentHandler);
 
-	glDeleteShader(vertexHandler);
-	if (geometryHandler != -1) 
+	glDeleteShader(_vertexHandler);
+	if (_geometryHandler != -1) 
 	{
-		glDeleteShader(geometryHandler);
+		glDeleteShader(_geometryHandler);
 	}
-	glDeleteShader(fragmentHandler);
+	glDeleteShader(_fragmentHandler);
 
-	glDeleteProgram(shaderHandler);
+	glDeleteProgram(_shaderHandler);
 }
 
 void Shader::getLinkingError() const
 {
 	int success;
 	std::string info;
-	glGetShaderiv(shaderHandler, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(_shaderHandler, GL_COMPILE_STATUS, &success);
 
 	if (!success)
 	{
-		glGetShaderInfoLog(shaderHandler, 512, NULL, info.data());
+		glGetShaderInfoLog(_shaderHandler, 512, NULL, info.data());
 		std::cout << "Shader linking failed:\n" << info << std::endl;
 	}
 }

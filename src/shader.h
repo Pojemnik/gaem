@@ -11,10 +11,10 @@
 class Shader
 {
 private:
-	GLuint shaderHandler;
-	GLuint fragmentHandler;
-	GLuint geometryHandler = -1;
-	GLuint vertexHandler;
+	GLuint _shaderHandler;
+	GLuint _fragmentHandler;
+	GLuint _geometryHandler = -1;
+	GLuint _vertexHandler;
 
 	void getLinkingError() const;
 	const std::string readShaderFromFile(std::string path) const;
