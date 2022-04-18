@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
+#include <matrix_transform.hpp>
 
 #include <iostream>
 #include <memory>
@@ -18,6 +19,8 @@ void freeResources()
 void initResources()
 {
     exampleLambert = std::make_unique<Shader>("src/shaders/example/f_lambert.glsl", "src/shaders/example/v_lambert.glsl");
+    glClearColor(0, 0, 0, 1);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void errorCallback(int error, const char* description)
@@ -27,8 +30,11 @@ void errorCallback(int error, const char* description)
 
 void draw(GLFWwindow* window)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 1.5f, -1.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 P = glm::perspective(glm::radians(50.0f), 1.0f, 0.01f, 50.0f);
+    exampleLambert->setUniformMatrix("P", P);
+    exampleLambert->setUniformMatrix("V", V);
     glfwSwapBuffers(window);
 }
 

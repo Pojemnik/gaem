@@ -1,6 +1,6 @@
 #include "shader.h"
 
-const std::string Shader::readShaderFromFile(std::string path) const
+const std::string Shader::readShaderFromFile(const std::string& path) const
 {
 	std::ifstream shaderFile(path);
 	std::ostringstream vertexBuffer;
@@ -8,7 +8,7 @@ const std::string Shader::readShaderFromFile(std::string path) const
 	return vertexBuffer.str();
 }
 
-GLuint Shader::loadShader(GLenum shaderType, std::string path) const
+GLuint Shader::loadShader(GLenum shaderType, const std::string& path) const
 {
 	GLuint handler;
 	handler = glCreateShader(shaderType);
@@ -51,6 +51,21 @@ Shader::Shader(std::string fragmentPath, std::string vertexPath)
 	glAttachShader(_shaderHandler, _vertexHandler);
 	glLinkProgram(_shaderHandler);
 	getLinkingError();
+}
+
+void Shader::setUniformMatrix(const std::string& name, const glm::mat4& mat)
+{
+	const auto location = glGetUniformLocation(_shaderHandler, name.c_str());
+	glUniformMatrix4fv(location, 1, false, glm::value_ptr(mat));
+}
+
+void Shader::setAttributePointer(const std::string& name, const std::vector<float>& val)
+{
+}
+
+void Shader::use()
+{
+	glUseProgram(_shaderHandler);
 }
 
 Shader::~Shader()
