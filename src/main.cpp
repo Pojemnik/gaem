@@ -3,7 +3,12 @@
 #include <glm.hpp>
 
 #include <iostream>
+#include <memory>
+
 #include "main.h"
+#include "shader.h"
+
+std::unique_ptr<Shader> exampleLambert;
 
 void freeResources()
 {
@@ -12,7 +17,7 @@ void freeResources()
 
 void initResources()
 {
-
+    exampleLambert = std::make_unique<Shader>("src/shaders/example/f_lambert.glsl", "src/shaders/example/v_lambert.glsl");
 }
 
 void errorCallback(int error, const char* description)

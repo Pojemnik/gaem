@@ -19,7 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\shader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\shader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
