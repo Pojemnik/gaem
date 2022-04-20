@@ -7,12 +7,14 @@
 #include <memory>
 
 #include "main.h"
+#include "definitions.h"
 #include "shader.h"
 #include "model.h"
+#include "objectRenderer.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
-std::unique_ptr<Model> chemirail;
+ObjectRenderer chemirailObject = ObjectRenderer(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
 
 void freeResources()
 {
@@ -23,7 +25,6 @@ void initResources()
 {
 	exampleLambert = std::make_unique<Shader>("src/shaders/example/f_lambert.glsl", "src/shaders/example/v_lambert.glsl");
 	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
-	chemirail = std::make_unique<Model>("assets/models/untitled.obj");
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 }
@@ -45,14 +46,8 @@ void draw(GLFWwindow* window, float timeDelta)
 	exampleConstant->setUniformMatrix("P", P);
 	exampleConstant->setUniformMatrix("V", V);
 
-	glm::mat4 M = glm::mat4(1.0f);
-	M = glm::rotate(M, timeAcc / 5.f, glm::vec3(0, 1, 0));
-	exampleConstant->setUniformMatrix("M", M);
-	exampleConstant->enableAndSetAttributeArray("vertex", chemirail->getVertices(), 4);
-	exampleConstant->enableAndSetAttributeArray("normal", chemirail->getVertices(), 3);
-	glDrawArrays(GL_TRIANGLES, 0, chemirail->getVertices().size() / 4);
-	exampleConstant->disableAttributeArray("vertex");
-	exampleConstant->disableAttributeArray("normal");
+	chemirailObject.rotate(timeDelta, vec3(0, 1, 0));
+	chemirailObject.draw(*exampleConstant.get());
 
 	glfwSwapBuffers(window);
 }

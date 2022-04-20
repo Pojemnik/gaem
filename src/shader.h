@@ -26,9 +26,9 @@ private:
 public:
 	Shader(std::string fragmentPath, std::string geometryPath, std::string vertexPath);
 	Shader(std::string fragmentPath, std::string vertexPath);
-	void setUniformMatrix(const std::string& name, const glm::mat4& mat);
-	void enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size);
-	void disableAttributeArray(const std::string& name);
-	void use();
+	void setUniformMatrix(const std::string& name, const glm::mat4& mat) const;
+	void enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size) const;
+	void disableAttributeArray(const std::string& name) const;
+	void use() const;
 	~Shader();
 };
