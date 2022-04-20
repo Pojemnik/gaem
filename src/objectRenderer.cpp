@@ -11,7 +11,7 @@ void ObjectRenderer::rotate(float angle, vec3 axis)
 
 void ObjectRenderer::rotateDeg(float angle, vec3 axis)
 {
-	_matrix = glm::rotate(_matrix, angle * _deg2rad, axis);
+	_matrix = glm::rotate(_matrix, glm::radians(angle), axis);
 }
 
 void ObjectRenderer::move(vec3 direction)

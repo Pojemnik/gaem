@@ -11,10 +11,12 @@
 #include "shader.h"
 #include "model.h"
 #include "objectRenderer.h"
+#include "camera.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
 ObjectRenderer chemirailObject = ObjectRenderer(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
+Camera camera = Camera(vec3(0.f,0.f,-2.f), vec3(0.f,0.f,0.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 
 void freeResources()
 {
@@ -41,10 +43,7 @@ void draw(GLFWwindow* window, float timeDelta)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	exampleConstant->use();
-	glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -2.f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), 1.0f, 0.01f, 50.0f);
-	exampleConstant->setUniformMatrix("P", P);
-	exampleConstant->setUniformMatrix("V", V);
+	camera.update(*exampleConstant.get());
 
 	chemirailObject.rotate(timeDelta, vec3(0, 1, 0));
 	chemirailObject.draw(*exampleConstant.get());
