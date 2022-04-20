@@ -55,12 +55,21 @@ Shader::Shader(std::string fragmentPath, std::string vertexPath)
 
 void Shader::setUniformMatrix(const std::string& name, const glm::mat4& mat)
 {
-	const auto location = glGetUniformLocation(_shaderHandler, name.c_str());
+	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());
 	glUniformMatrix4fv(location, 1, false, glm::value_ptr(mat));
 }
 
-void Shader::setAttributePointer(const std::string& name, const std::vector<float>& val)
+void Shader::enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size)
 {
+	const GLuint location = glGetAttribLocation(_shaderHandler, name.c_str());
+	glEnableVertexAttribArray(location);
+	glVertexAttribPointer(location, size, GL_FLOAT, false, 0, val.data());
+}
+
+void Shader::disableAttributeArray(const std::string& name)
+{
+	const GLuint location = glGetAttribLocation(_shaderHandler, name.c_str());
+	glDisableVertexAttribArray(location);
 }
 
 void Shader::use()

@@ -1,5 +1,8 @@
 #include "model.h"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
 Model::Model(std::string path)
 {
 	tinyobj::ObjReaderConfig reader_config;
@@ -32,31 +35,50 @@ Model::Model(std::string path)
 
 			for (size_t v = 0; v < fv; v++) {
 				tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-				_indices.vertex.push_back(idx.vertex_index);
-				_indices.normal.push_back(idx.normal_index);
-				_indices.tex.push_back(idx.texcoord_index);
 
 				tinyobj::real_t vx = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
 				tinyobj::real_t vy = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
 				tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
-				_vertices.push_back(glm::vec3(vx, vy, vz));
+				_vertices.push_back(vx);
+				_vertices.push_back(vy);
+				_vertices.push_back(vz);
+				_vertices.push_back(1);
 
 				if (idx.normal_index >= 0)
 				{
 					tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
 					tinyobj::real_t ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
 					tinyobj::real_t nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
-					_normal.push_back(glm::vec3(nx, ny, nz));
+					_normal.push_back(nx);
+					_normal.push_back(ny);
+					_normal.push_back(nz);
 				}
 
 				if (idx.texcoord_index >= 0)
 				{
 					tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
 					tinyobj::real_t ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
-					_texcoord.push_back(glm::vec2(tx, ty));
+					_texcoord.push_back(tx);
+					_texcoord.push_back(ty);
 				}
 			}
 			index_offset += fv;
 		}
 	}
+	_size = _vertices.size() / 4;
+}
+
+const std::vector<float>& Model::getVertices() const
+{
+	return _vertices;
+}
+
+const std::vector<float>& Model::getNormals() const
+{
+	return _normal;
+}
+
+const int Model::getSize() const
+{
+	return _size;
 }

@@ -19,16 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="object.cpp" />
+    <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\model.cpp" />
+    <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="object.h" />
+    <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\object.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="tiny_obj_loader\tiny_obj_loader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\example\f_constant.glsl" />
+    <None Include="src\shaders\example\f_lambert.glsl" />
+    <None Include="src\shaders\example\v_constant.glsl" />
+    <None Include="src\shaders\example\v_lambert.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -90,12 +99,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\WorkingDir\gaem\glfw\lib;C:\WorkingDir\gaem\glew\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\WorkingDir\gaem\glfw\lib;C:\WorkingDir\gaem\glew\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -133,7 +142,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +161,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
