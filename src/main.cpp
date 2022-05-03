@@ -12,6 +12,7 @@
 #include "model.h"
 #include "objectRenderer.h"
 #include "camera.h"
+#include "keyboard.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
@@ -29,6 +30,7 @@ void initResources()
 	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
+	Keyboard::addTrackedKeys(std::vector<int>{GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D});
 }
 
 void errorCallback(int error, const char* description)
@@ -43,6 +45,22 @@ void draw(GLFWwindow* window, float timeDelta)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	exampleConstant->use();
+	if (Keyboard::isKeyPressed(GLFW_KEY_W))
+	{
+		camera.moveWithTarget(glm::vec3(0, 0, 1) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_S))
+	{
+		camera.moveWithTarget(glm::vec3(0, 0, -1) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_A))
+	{
+		camera.moveWithTarget(glm::vec3(1, 0, 0) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_D))
+	{
+		camera.moveWithTarget(glm::vec3(-1, 0, 0) * timeDelta);
+	}
 	camera.update(*exampleConstant.get());
 
 	chemirailObject.rotate(timeDelta, vec3(0, 1, 0));
@@ -77,6 +95,8 @@ int main(void)
 		return 1;
 	}
 	initResources();
+
+	glfwSetKeyCallback(window, Keyboard::keyCallback);
 
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window))
