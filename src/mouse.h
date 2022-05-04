@@ -9,6 +9,8 @@ class Mouse
 private:
 	inline static vec2 _cursorPosition = vec2(0);
 	inline static vec2 _cursorDelta = vec2(0);
+	inline static bool _isCursorLocked = false;
+
 public:
 	void static lockCursor(GLFWwindow* window);
 	void static unlockCursor(GLFWwindow* window);

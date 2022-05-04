@@ -101,6 +101,7 @@ int main(void)
 
 	glfwSetKeyCallback(window, Keyboard::keyCallback);
 	glfwSetCursorPosCallback(window, Mouse::cursorPositionCallback);
+	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window));
 	Mouse::lockCursor(window);
 
