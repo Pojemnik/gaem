@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "main.h"
 #include "definitions.h"
@@ -13,6 +14,7 @@
 #include "objectRenderer.h"
 #include "camera.h"
 #include "keyboard.h"
+#include "mouse.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
@@ -30,7 +32,7 @@ void initResources()
 	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
-	Keyboard::addTrackedKeys(std::vector<int>{GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D});
+	Keyboard::addTrackedKeys(std::vector<int>{GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_ESCAPE});
 }
 
 void errorCallback(int error, const char* description)
@@ -97,6 +99,8 @@ int main(void)
 	initResources();
 
 	glfwSetKeyCallback(window, Keyboard::keyCallback);
+	glfwSetCursorPosCallback(window, Mouse::cursorPositionCallback);
+	Mouse::lockCursor(window);
 
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window))
@@ -104,6 +108,10 @@ int main(void)
 		float time = glfwGetTime();
 		glfwSetTime(0);
 		draw(window, time);
+		vec2 cursorPos = Mouse::getCursorPosition();
+		std::cout << "Pos: " << cursorPos.x << " " << cursorPos.y << std::endl;
+		vec2 cursorDelta = Mouse::getCursorDelta();
+		std::cout << "Delta: " << cursorDelta.x << " " << cursorDelta.y << std::endl;
 		glfwPollEvents();
 	}
 
