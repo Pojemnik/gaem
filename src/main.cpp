@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <functional>
 
 #include "main.h"
 #include "definitions.h"
@@ -100,6 +101,7 @@ int main(void)
 
 	glfwSetKeyCallback(window, Keyboard::keyCallback);
 	glfwSetCursorPosCallback(window, Mouse::cursorPositionCallback);
+	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window));
 	Mouse::lockCursor(window);
 
 	glfwSetTime(0);
@@ -115,6 +117,7 @@ int main(void)
 		glfwPollEvents();
 	}
 
+	Keyboard::removeKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK");
 	freeResources();
 	glfwDestroyWindow(window);
 	glfwTerminate();
