@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\model.cpp" />
@@ -30,12 +31,14 @@
   <ItemGroup>
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\definitions.h" />
+    <ClInclude Include="src\inputAdapter.h" />
     <ClInclude Include="src\keyboard.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\mouse.h" />
     <ClInclude Include="src\objectRenderer.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\util.h" />
     <ClInclude Include="tiny_obj_loader\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>

@@ -16,11 +16,14 @@
 #include "camera.h"
 #include "keyboard.h"
 #include "mouse.h"
+#include "inputAdapter.h"
+#include "util.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
-ObjectRenderer chemirailObject = ObjectRenderer(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
-Camera camera = Camera(vec3(0.f,0.f,-2.f), vec3(0.f,0.f,0.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
+ObjectRenderer chemirailObject =
+ObjectRenderer(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
+Camera camera = Camera(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 
 void freeResources()
 {
@@ -33,7 +36,9 @@ void initResources()
 	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
-	Keyboard::addTrackedKeys(std::vector<int>{GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_ESCAPE});
+	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
+		GLFW_KEY_D, GLFW_KEY_ESCAPE };
+	Keyboard::addTrackedKeys(trackedKeys);
 }
 
 void errorCallback(int error, const char* description)
@@ -50,20 +55,24 @@ void draw(GLFWwindow* window, float timeDelta)
 	exampleConstant->use();
 	if (Keyboard::isKeyPressed(GLFW_KEY_W))
 	{
-		camera.moveWithTarget(glm::vec3(0, 0, 1) * timeDelta);
+		camera.move(glm::vec3(0, 0, 1) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_S))
 	{
-		camera.moveWithTarget(glm::vec3(0, 0, -1) * timeDelta);
+		camera.move(glm::vec3(0, 0, -1) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_A))
 	{
-		camera.moveWithTarget(glm::vec3(1, 0, 0) * timeDelta);
+		camera.move(glm::vec3(-1, 0, 0) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_D))
 	{
-		camera.moveWithTarget(glm::vec3(-1, 0, 0) * timeDelta);
+		camera.move(glm::vec3(1, 0, 0) * timeDelta);
 	}
+	Mouse::updateMousePosition(window);
+	vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
+	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
+	camera.set2DRotation(cameraInput);
 	camera.update(*exampleConstant.get());
 
 	chemirailObject.rotate(timeDelta, vec3(0, 1, 0));
@@ -111,10 +120,10 @@ int main(void)
 		float time = glfwGetTime();
 		glfwSetTime(0);
 		draw(window, time);
-		vec2 cursorPos = Mouse::getCursorPosition();
-		std::cout << "Pos: " << cursorPos.x << " " << cursorPos.y << std::endl;
-		vec2 cursorDelta = Mouse::getCursorDelta();
-		std::cout << "Delta: " << cursorDelta.x << " " << cursorDelta.y << std::endl;
+		//vec2 cursorPos = Mouse::getCursorPosition();
+		//std::cout << "Pos: " << cursorPos.x << " " << cursorPos.y << std::endl;
+		//vec2 cursorDelta = Mouse::getCursorDelta();
+		//std::cout << "Delta: " << cursorDelta.x << " " << cursorDelta.y << std::endl;
 		glfwPollEvents();
 	}
 
