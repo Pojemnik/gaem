@@ -49,23 +49,25 @@ Model::Model(std::string path)
 					tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
 					tinyobj::real_t ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
 					tinyobj::real_t nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
-					_normal.push_back(nx);
-					_normal.push_back(ny);
-					_normal.push_back(nz);
+					_normals.push_back(nx);
+					_normals.push_back(ny);
+					_normals.push_back(nz);
 				}
 
 				if (idx.texcoord_index >= 0)
 				{
 					tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
 					tinyobj::real_t ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
-					_texcoord.push_back(tx);
-					_texcoord.push_back(ty);
+					_texcoords.push_back(tx);
+					_texcoords.push_back(ty);
 				}
 			}
 			index_offset += fv;
 		}
 	}
-	_size = _vertices.size() / 4;
+	_verticesSize = _vertices.size() / 4;
+	_normalsSize = _normals.size() / 3;
+	_texcoordsSize = _texcoords.size() / 2;
 }
 
 const std::vector<float>& Model::getVertices() const
@@ -75,10 +77,20 @@ const std::vector<float>& Model::getVertices() const
 
 const std::vector<float>& Model::getNormals() const
 {
-	return _normal;
+	return _normals;
 }
 
-const int Model::getSize() const
+const int Model::getVerticesSize() const
 {
-	return _size;
+	return _verticesSize;
+}
+
+const int Model::getNormalsSize() const
+{
+	return _normalsSize;
+}
+
+const int Model::getTexCoordsSize() const
+{
+	return _texcoordsSize;
 }

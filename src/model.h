@@ -9,14 +9,18 @@ class Model
 {
 private:
 	std::vector<float> _vertices;
-	std::vector<float> _normal;
-	std::vector<float> _texcoord;
-	int _size;
+	std::vector<float> _normals;
+	std::vector<float> _texcoords;
+	int _verticesSize;
+	int _normalsSize;
+	int _texcoordsSize;
 
 public:
 	Model(std::string path);
 	const std::vector<float>& getVertices() const;
 	const std::vector<float>& getNormals() const;
-	const int getSize() const;
+	const int getVerticesSize() const;
+	const int getNormalsSize() const;
+	const int getTexCoordsSize() const;
 };
 

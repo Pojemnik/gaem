@@ -12,7 +12,7 @@
 #include "definitions.h"
 #include "shader.h"
 #include "model.h"
-#include "objectRenderer.h"
+#include "drawableObject.h"
 #include "camera.h"
 #include "keyboard.h"
 #include "mouse.h"
@@ -21,8 +21,8 @@
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
-ObjectRenderer chemirailObject =
-ObjectRenderer(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
+DrawableObject chemirailObject =
+DrawableObject(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
 Camera camera = Camera(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 
 void freeResources()

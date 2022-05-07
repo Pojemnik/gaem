@@ -7,15 +7,14 @@
 #include "shader.h"
 #include "model.h"
 
-class ObjectRenderer
+class DrawableObject
 {
 private:
 	mat4 _matrix;
 	std::unique_ptr<Model> _model;
-	static const float _deg2rad;
 
 public:
-	ObjectRenderer(std::unique_ptr<Model> model);
+	DrawableObject(std::unique_ptr<Model> model);
 	void rotate(float angle, vec3 axis);
 	void rotateDeg(float angle, vec3 axis);
 	void move(vec3 direction);
