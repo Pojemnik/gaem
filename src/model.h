@@ -2,25 +2,22 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <unordered_map>
 
 #include <glm.hpp>
+
+#include "definitions.h"
 
 class Model
 {
 private:
-	std::vector<float> _vertices;
-	std::vector<float> _normals;
-	std::vector<float> _texcoords;
-	int _verticesSize;
-	int _normalsSize;
-	int _texcoordsSize;
+	std::unordered_map<BufferType, std::vector<float>> _data;
+	std::unordered_map<BufferType, int> _sizes;
 
 public:
 	Model(std::string path);
-	const std::vector<float>& getVertices() const;
-	const std::vector<float>& getNormals() const;
-	const int getVerticesSize() const;
-	const int getNormalsSize() const;
-	const int getTexCoordsSize() const;
+	const std::vector<float>& getVector(BufferType type) const;
+	int getSize(BufferType type) const;
+	int getLength(BufferType type) const;
 };
 

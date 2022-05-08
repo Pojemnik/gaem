@@ -27,7 +27,7 @@
     <ClCompile Include="src\model.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\objectRenderer.cpp">
+    <ClCompile Include="src\drawableObject.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\keyboard.cpp">
@@ -37,6 +37,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\inputAdapter.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vertexArray.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +59,7 @@
     <ClInclude Include="src\model.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\objectRenderer.h">
+    <ClInclude Include="src\drawableObject.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\definitions.h">
@@ -74,6 +77,9 @@
     <ClInclude Include="src\util.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\vertexArray.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\example\f_lambert.glsl">
@@ -86,6 +92,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="src\shaders\example\v_constant.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\f_simple.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\v_simple.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>

@@ -25,8 +25,9 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\mouse.cpp" />
-    <ClCompile Include="src\objectRenderer.cpp" />
+    <ClCompile Include="src\drawableObject.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\vertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\camera.h" />
@@ -36,9 +37,10 @@
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\mouse.h" />
-    <ClInclude Include="src\objectRenderer.h" />
+    <ClInclude Include="src\drawableObject.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\util.h" />
+    <ClInclude Include="src\vertexArray.h" />
     <ClInclude Include="tiny_obj_loader\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +48,8 @@
     <None Include="src\shaders\example\f_lambert.glsl" />
     <None Include="src\shaders\example\v_constant.glsl" />
     <None Include="src\shaders\example\v_lambert.glsl" />
+    <None Include="src\shaders\f_simple.glsl" />
+    <None Include="src\shaders\v_simple.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -2,19 +2,20 @@
 #include <glm.hpp>
 
 #include <memory>
+#include <string>
 
 #include "definitions.h"
 #include "shader.h"
-#include "model.h"
+#include "vertexArray.h"
 
 class DrawableObject
 {
 private:
 	mat4 _matrix;
-	std::unique_ptr<Model> _model;
+	const VertexArray _vertexArray;
 
 public:
-	DrawableObject(std::unique_ptr<Model> model);
+	DrawableObject(std::string file);
 	void rotate(float angle, vec3 axis);
 	void rotateDeg(float angle, vec3 axis);
 	void move(vec3 direction);

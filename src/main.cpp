@@ -21,9 +21,9 @@
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
-DrawableObject chemirailObject =
-DrawableObject(std::move(std::make_unique<Model>("assets/models/untitled.obj")));
-Camera camera = Camera(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
+std::unique_ptr<Shader> simple;
+std::unique_ptr<DrawableObject> chemirailObject;
+std::unique_ptr<Camera> camera;
 
 void freeResources()
 {
@@ -34,11 +34,14 @@ void initResources()
 {
 	exampleLambert = std::make_unique<Shader>("src/shaders/example/f_lambert.glsl", "src/shaders/example/v_lambert.glsl");
 	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
+	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
 		GLFW_KEY_D, GLFW_KEY_ESCAPE };
 	Keyboard::addTrackedKeys(trackedKeys);
+	chemirailObject = std::make_unique<DrawableObject>("assets/models/untitled.obj");
+	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 }
 
 void errorCallback(int error, const char* description)
@@ -52,31 +55,31 @@ void draw(GLFWwindow* window, float timeDelta)
 	timeAcc += timeDelta;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	exampleConstant->use();
+	simple->use();
 	if (Keyboard::isKeyPressed(GLFW_KEY_W))
 	{
-		camera.move(glm::vec3(0, 0, 1) * timeDelta);
+		camera->move(glm::vec3(0, 0, 1) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_S))
 	{
-		camera.move(glm::vec3(0, 0, -1) * timeDelta);
+		camera->move(glm::vec3(0, 0, -1) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_A))
 	{
-		camera.move(glm::vec3(-1, 0, 0) * timeDelta);
+		camera->move(glm::vec3(-1, 0, 0) * timeDelta);
 	}
 	if (Keyboard::isKeyPressed(GLFW_KEY_D))
 	{
-		camera.move(glm::vec3(1, 0, 0) * timeDelta);
+		camera->move(glm::vec3(1, 0, 0) * timeDelta);
 	}
 	Mouse::updateMousePosition(window);
 	vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
 	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
-	camera.set2DRotation(cameraInput);
-	camera.update(*exampleConstant.get());
+	camera->set2DRotation(cameraInput);
+	camera->update(*exampleConstant.get());
 
-	chemirailObject.rotate(timeDelta, vec3(0, 1, 0));
-	chemirailObject.draw(*exampleConstant.get());
+	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
+	chemirailObject->draw(*simple.get());
 
 	glfwSwapBuffers(window);
 }
@@ -120,10 +123,6 @@ int main(void)
 		float time = glfwGetTime();
 		glfwSetTime(0);
 		draw(window, time);
-		//vec2 cursorPos = Mouse::getCursorPosition();
-		//std::cout << "Pos: " << cursorPos.x << " " << cursorPos.y << std::endl;
-		//vec2 cursorDelta = Mouse::getCursorDelta();
-		//std::cout << "Delta: " << cursorDelta.x << " " << cursorDelta.y << std::endl;
 		glfwPollEvents();
 	}
 

@@ -1,7 +1,7 @@
 #include "drawableObject.h"
 
-DrawableObject::DrawableObject(std::unique_ptr<Model> model)
-	: _model(std::move(model)), _matrix(1.0f) {}
+DrawableObject::DrawableObject(std::string file)
+	: _vertexArray(file), _matrix(1.0f) {}
 
 void DrawableObject::rotate(float angle, vec3 axis)
 {
@@ -26,9 +26,7 @@ void DrawableObject::scale(vec3 coef)
 void DrawableObject::draw(const Shader& shader)
 {
 	shader.setUniformMatrix("M", _matrix);
-	shader.enableAndSetAttributeArray("vertex", _model->getVertices(), 4);
-	shader.enableAndSetAttributeArray("normal", _model->getNormals(), 3);
-	glDrawArrays(GL_TRIANGLES, 0, _model->getVerticesSize());
-	shader.disableAttributeArray("vertex");
-	shader.disableAttributeArray("normal");
+	glBindVertexArray(_vertexArray.getArray());
+	glDrawArrays(GL_TRIANGLES, 0, _vertexArray.getSize());
+	glBindVertexArray(0);
 }
