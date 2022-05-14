@@ -25,6 +25,7 @@ void DrawableObject::scale(vec3 coef)
 
 void DrawableObject::draw(const Shader& shader)
 {
+	shader.use();
 	shader.setUniformMatrix("M", _matrix);
 	glBindVertexArray(_vertexArray.getArray());
 	glDrawArrays(GL_TRIANGLES, 0, _vertexArray.getSize());

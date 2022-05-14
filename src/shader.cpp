@@ -35,9 +35,9 @@ Shader::Shader(std::string fragmentPath, std::string geometryPath, std::string v
 	_fragmentHandler = loadShader(GL_FRAGMENT_SHADER, fragmentPath);
 	_geometryHandler = loadShader(GL_GEOMETRY_SHADER, geometryPath);
 	_vertexHandler = loadShader(GL_VERTEX_SHADER, vertexPath);
-	glAttachShader(_shaderHandler, _fragmentHandler);
-	glAttachShader(_shaderHandler, _geometryHandler);
 	glAttachShader(_shaderHandler, _vertexHandler);
+	glAttachShader(_shaderHandler, _geometryHandler);
+	glAttachShader(_shaderHandler, _fragmentHandler);
 	glLinkProgram(_shaderHandler);
 	getLinkingError();
 }
@@ -57,6 +57,12 @@ void Shader::setUniformMatrix(const std::string& name, const glm::mat4& mat) con
 {
 	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());
 	glUniformMatrix4fv(location, 1, false, glm::value_ptr(mat));
+}
+
+void Shader::setUniform3f(const std::string& name, const vec3 val) const
+{
+	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());
+	glUniform3f(location, val.x, val.y, val.z);
 }
 
 void Shader::enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size) const
@@ -100,8 +106,7 @@ void Shader::getLinkingError() const
 {
 	int success;
 	std::string info;
-	glGetShaderiv(_shaderHandler, GL_COMPILE_STATUS, &success);
-
+	glGetProgramiv(_shaderHandler, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		glGetShaderInfoLog(_shaderHandler, 512, NULL, info.data());

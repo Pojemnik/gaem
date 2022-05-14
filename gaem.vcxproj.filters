@@ -42,6 +42,9 @@
     <ClCompile Include="src\vertexArray.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\text.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main.h">
@@ -80,6 +83,12 @@
     <ClInclude Include="src\vertexArray.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\text.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ft2build.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\example\f_lambert.glsl">
@@ -98,6 +107,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="src\shaders\v_simple.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\f_text.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\v_text.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>

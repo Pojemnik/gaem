@@ -11,6 +11,9 @@
 #include <memory>
 #include <vector>
 
+#include "definitions.h"
+#include "util.h"
+
 class Shader
 {
 private:
@@ -26,7 +29,8 @@ private:
 public:
 	Shader(std::string fragmentPath, std::string geometryPath, std::string vertexPath);
 	Shader(std::string fragmentPath, std::string vertexPath);
-	void setUniformMatrix(const std::string& name, const glm::mat4& mat) const;
+	void setUniformMatrix(const std::string& name, const mat4& mat) const;
+	void setUniform3f(const std::string& name, const vec3 val) const;
 	void enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size) const;
 	void disableAttributeArray(const std::string& name) const;
 	void use() const;

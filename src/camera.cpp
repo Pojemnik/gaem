@@ -20,6 +20,7 @@ void Camera::update(const Shader& shader)
 	{
 		recalc();
 	}
+	shader.use();
 	shader.setUniformMatrix("P", _perspective);
 	shader.setUniformMatrix("V", _view);
 }
