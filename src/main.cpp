@@ -8,7 +8,6 @@
 #include <string>
 #include <functional>
 
-#include "main.h"
 #include "definitions.h"
 #include "shader.h"
 #include "model.h"
@@ -19,6 +18,7 @@
 #include "inputAdapter.h"
 #include "util.h"
 #include "text.h"
+#include "window.h"
 
 std::unique_ptr<Shader> exampleLambert;
 std::unique_ptr<Shader> exampleConstant;
@@ -101,7 +101,6 @@ void draw(GLFWwindow* window, float timeDelta)
 
 int main(void)
 {
-	GLFWwindow* window;
 	glfwSetErrorCallback(errorCallback);
 	if (!glfwInit())
 	{
@@ -109,14 +108,8 @@ int main(void)
 		return 1;
 	}
 
-	window = glfwCreateWindow(640, 480, "Gaem", NULL, NULL);
-	if (!window)
-	{
-		std::cerr << "Window creation error" << std::endl;
-		glfwTerminate();
-		return 1;
-	}
-	glfwMakeContextCurrent(window);
+	Window window(glm::vec2(640, 480), "Gaem");
+	
 	GLenum glewInitResult = glewInit();
 	if (glewInitResult != GLEW_OK)
 	{
@@ -125,33 +118,32 @@ int main(void)
 	}
 	initResources();
 
-	glViewport(0.f, 0.f, 640.f, 480.f);
+	
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glfwSetKeyCallback(window, Keyboard::keyCallback);
-	glfwSetCursorPosCallback(window, Mouse::cursorPositionCallback);
-	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
-	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window));
-	Mouse::lockCursor(window);
+	glfwSetKeyCallback(window.getWindow(), Keyboard::keyCallback);
+	glfwSetCursorPosCallback(window.getWindow(), Mouse::cursorPositionCallback);
+	glfwSetMouseButtonCallback(window.getWindow(), Mouse::mouseButtonCallback);
+	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window.getWindow()));
+	Mouse::lockCursor(window.getWindow());
 	text->setText("test");
 	text->setPosition(vec2(0.f, 0.f));
 	text2->setText("test2");
 	text2->setPosition(vec2(300.f, 300.f));
 	glfwSetTime(0);
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window.getWindow()))
 	{
 		float time = glfwGetTime();
 		glfwSetTime(0);
-		draw(window, time);
+		draw(window.getWindow(), time);
 		glfwPollEvents();
 		printOpenGLErrorIfAny();
 	}
 
 	Keyboard::removeKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK");
 	freeResources();
-	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
 }

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -29,14 +30,15 @@
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\vertexArray.cpp" />
+    <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\definitions.h" />
+    <ClInclude Include="src\drawable.h" />
     <ClInclude Include="src\ft2build.h" />
     <ClInclude Include="src\inputAdapter.h" />
     <ClInclude Include="src\keyboard.h" />
-    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\mouse.h" />
     <ClInclude Include="src\drawableObject.h" />
@@ -44,6 +46,7 @@
     <ClInclude Include="src\text.h" />
     <ClInclude Include="src\util.h" />
     <ClInclude Include="src\vertexArray.h" />
+    <ClInclude Include="src\window.h" />
     <ClInclude Include="tiny_obj_loader\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
