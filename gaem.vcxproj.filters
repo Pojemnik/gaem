@@ -45,9 +45,6 @@
     <ClCompile Include="src\text.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\drawable.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>

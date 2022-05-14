@@ -1,28 +1,28 @@
 #include "camera.h"
 
 Camera::Camera(vec3 position,float fov, float aspect, float near, float far,
-	vec3 up) : _position(position), _fov(fov), _aspect(aspect), _near(near),
-	_far(far), _up(up), _rotation(0, 0, -90)
+	const Window& window, vec3 up) : _position(position), _fov(fov),
+	_aspect(aspect), _near(near), _far(far), _up(up), _rotation(0, 0, -90)
 {
-	recalc();
+	recalcViewAndPerspective();
+	glm::ivec2 windowSize = window.getSize();
+	_ortho = glm::ortho(0.f, static_cast<float>(windowSize.x), 0.f,
+		static_cast<float>(windowSize.y));
 }
 
-void Camera::recalc()
+void Camera::recalcViewAndPerspective()
 {
 	_view = glm::lookAt(_position, _direction + _position, _up);
 	_perspective = glm::perspective(_fov, _aspect, _near, _far);
 	_recalcNeeded = false;
 }
 
-void Camera::update(const Shader& shader)
+void Camera::update()
 {
 	if (_recalcNeeded)
 	{
-		recalc();
+		recalcViewAndPerspective();
 	}
-	shader.use();
-	shader.setUniformMatrix("P", _perspective);
-	shader.setUniformMatrix("V", _view);
 }
 
 void Camera::move(vec3 delta)
@@ -49,6 +49,21 @@ void Camera::set2DRotation(vec2 inputVector)
 		* cos(glm::radians(_rotation.pitch));
 	_direction = glm::normalize(direction);
 	_recalcNeeded = true;
+}
+
+mat4 Camera::getOrthoMatrix() const
+{
+	return _ortho;
+}
+
+mat4 Camera::getViewMatrix() const
+{
+	return _view;
+}
+
+mat4 Camera::getPerspectiveMatrix() const
+{
+	return _perspective;
 }
 
 Camera::CameraRotation::CameraRotation(float aRoll, float aPitch, float aYaw)

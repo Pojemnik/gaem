@@ -21,11 +21,10 @@ void Text::initializeVertexArray()
     glBindVertexArray(0);
 }
 
-void Text::draw(const Shader& shader) 
+void Text::draw(const Camera& camera, const Shader& shader)
 {
     shader.use();
-    mat4 P = glm::ortho(0.f, 640.f, 0.f, 480.f);
-    shader.setUniformMatrix("P", P);
+    shader.setUniformMatrix("P", camera.getOrthoMatrix());
     shader.setUniform3f("textColor", _color);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_VAO);
@@ -39,7 +38,6 @@ void Text::draw(const Shader& shader)
 
         float w = ch.size.x * _scale;
         float h = ch.size.y * _scale;
-        // update VBO for each character
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },
             { xpos,     ypos,       0.0f, 1.0f },
@@ -134,6 +132,7 @@ Text::GlyphDatabase::CharacterData Text::GlyphDatabase::getGlyph(char character)
     if (!_initialized)
     {
         init();
+        _initialized = true;
     }
     return _data[character];
 }

@@ -49,7 +49,6 @@ void initResources()
 	chemirailObject = std::make_unique<DrawableObject>("assets/models/untitled.obj");
 	chemirailObject2 = std::make_unique<DrawableObject>("assets/models/untitled.obj");
 	chemirailObject2->move(vec3(2, 0, 0));
-	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 	text = std::make_unique<Text>();
 	text2 = std::make_unique<Text>();
 }
@@ -86,15 +85,15 @@ void draw(GLFWwindow* window, float timeDelta)
 	vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
 	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
 	camera->set2DRotation(cameraInput);
-	camera->update(*simple.get());
+	camera->update();
 
 	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
-	chemirailObject->draw(*simple);
+	chemirailObject->draw(*camera, *simple);
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
-	chemirailObject2->draw(*simple);
+	chemirailObject2->draw(*camera, *simple);
 
-	text->draw(*textShader);
-	text2->draw(*textShader);
+	text->draw(*camera, *textShader);
+	text2->draw(*camera, *textShader);
 
 	glfwSwapBuffers(window);
 }
@@ -109,7 +108,7 @@ int main(void)
 	}
 
 	Window window(glm::vec2(640, 480), "Gaem");
-	
+	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f, window);
 	GLenum glewInitResult = glewInit();
 	if (glewInitResult != GLEW_OK)
 	{
@@ -128,10 +127,12 @@ int main(void)
 	glfwSetMouseButtonCallback(window.getWindow(), Mouse::mouseButtonCallback);
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window.getWindow()));
 	Mouse::lockCursor(window.getWindow());
+
 	text->setText("test");
 	text->setPosition(vec2(0.f, 0.f));
 	text2->setText("test2");
 	text2->setPosition(vec2(300.f, 300.f));
+
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window.getWindow()))
 	{

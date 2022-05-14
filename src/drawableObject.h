@@ -7,8 +7,9 @@
 #include "definitions.h"
 #include "shader.h"
 #include "vertexArray.h"
+#include "drawable.h"
 
-class DrawableObject
+class DrawableObject : public Drawable
 {
 private:
 	mat4 _matrix;
@@ -20,6 +21,6 @@ public:
 	void rotateDeg(float angle, vec3 axis);
 	void move(vec3 direction);
 	void scale(vec3 coef);
-	void draw(const Shader& shader);
+	void draw(const Camera& camera, const Shader& shader);
 };
 

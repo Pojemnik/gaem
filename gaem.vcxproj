@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera.cpp" />
-    <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />

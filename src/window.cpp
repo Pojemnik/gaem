@@ -11,6 +11,7 @@ Window::Window(glm::ivec2 size, std::string name) : _size(size),
 	}
 	glfwMakeContextCurrent(_window);
 	glViewport(0, 0, size.x, size.y);
+	glfwSetWindowSizeLimits(_window, size.x, size.y, size.x, size.y);
 }
 
 Window::~Window()
@@ -21,4 +22,9 @@ Window::~Window()
 GLFWwindow* Window::getWindow() const
 {
 	return _window;
+}
+
+glm::ivec2 Window::getSize() const
+{
+	return _size;
 }

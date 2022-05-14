@@ -23,10 +23,12 @@ void DrawableObject::scale(vec3 coef)
 	_matrix = glm::scale(_matrix, coef);
 }
 
-void DrawableObject::draw(const Shader& shader)
+void DrawableObject::draw(const Camera& camera, const Shader& shader)
 {
 	shader.use();
 	shader.setUniformMatrix("M", _matrix);
+	shader.setUniformMatrix("P", camera.getPerspectiveMatrix());
+	shader.setUniformMatrix("V", camera.getViewMatrix());
 	glBindVertexArray(_vertexArray.getArray());
 	glDrawArrays(GL_TRIANGLES, 0, _vertexArray.getSize());
 	glBindVertexArray(0);

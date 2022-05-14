@@ -18,5 +18,6 @@ public:
 	Window(glm::ivec2 size, std::string name);
 	~Window();
 	GLFWwindow* getWindow() const;
+	glm::ivec2 getSize() const;
 };
 

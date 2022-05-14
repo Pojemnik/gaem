@@ -12,8 +12,9 @@
 #include "definitions.h"
 #include "shader.h"
 #include "util.h"
+#include "drawable.h"
 
-class Text
+class Text : public Drawable
 {
 private:
 	class GlyphDatabase
@@ -50,7 +51,7 @@ private:
 
 public:
 	Text();
-	void draw(const Shader& shader);
+	void draw(const Camera& camera, const Shader& shader);
 	void setPosition(vec2 position);
 	void setText(const std::string& text);
 };

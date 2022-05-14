@@ -4,6 +4,7 @@
 
 #include "definitions.h"
 #include "shader.h"
+#include "window.h"
 
 class Camera
 {
@@ -18,6 +19,7 @@ private:
 
 	mat4 _view;
 	mat4 _perspective;
+	mat4 _ortho;
 
 	CameraRotation _rotation;
 	vec3 _direction = vec3(0, 0, 0);
@@ -30,13 +32,16 @@ private:
 
 	bool _recalcNeeded = false;
 
-	void recalc();
+	void recalcViewAndPerspective();
 
 public:
 	Camera(vec3 position, float fov, float aspect, float near, float far,
-		vec3 up = vec3(0, 1, 0));
-	void update(const Shader& shader);
+		const Window& window, vec3 up = vec3(0, 1, 0));
+	void update();
 	void move(vec3 delta);
 	void set2DRotation(vec2 inputVector);
+	mat4 getOrthoMatrix() const;
+	mat4 getViewMatrix() const;
+	mat4 getPerspectiveMatrix() const;
 };
 
