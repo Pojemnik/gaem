@@ -28,6 +28,7 @@ std::unique_ptr<DrawableObject> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
+std::unique_ptr<Text> text2;
 
 void freeResources()
 {
@@ -50,6 +51,7 @@ void initResources()
 	chemirailObject2->move(vec3(2, 0, 0));
 	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f);
 	text = std::make_unique<Text>();
+	text2 = std::make_unique<Text>();
 }
 
 void errorCallback(int error, const char* description)
@@ -64,34 +66,35 @@ void draw(GLFWwindow* window, float timeDelta)
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//if (Keyboard::isKeyPressed(GLFW_KEY_W))
-	//{
-	//	camera->move(glm::vec3(0, 0, 1) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_S))
-	//{
-	//	camera->move(glm::vec3(0, 0, -1) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_A))
-	//{
-	//	camera->move(glm::vec3(-1, 0, 0) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_D))
-	//{
-	//	camera->move(glm::vec3(1, 0, 0) * timeDelta);
-	//}
-	//Mouse::updateMousePosition(window);
-	//vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
-	//vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
-	//camera->set2DRotation(cameraInput);
-	//camera->update(*simple.get());
+	if (Keyboard::isKeyPressed(GLFW_KEY_W))
+	{
+		camera->move(glm::vec3(0, 0, 1) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_S))
+	{
+		camera->move(glm::vec3(0, 0, -1) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_A))
+	{
+		camera->move(glm::vec3(-1, 0, 0) * timeDelta);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_D))
+	{
+		camera->move(glm::vec3(1, 0, 0) * timeDelta);
+	}
+	Mouse::updateMousePosition(window);
+	vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
+	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
+	camera->set2DRotation(cameraInput);
+	camera->update(*simple.get());
 
-	//chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
-	//chemirailObject->draw(*simple);
-	//chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
-	//chemirailObject2->draw(*simple);
+	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
+	chemirailObject->draw(*simple);
+	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
+	chemirailObject2->draw(*simple);
 
 	text->draw(*textShader);
+	text2->draw(*textShader);
 
 	glfwSwapBuffers(window);
 }
@@ -132,9 +135,10 @@ int main(void)
 	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window));
 	Mouse::lockCursor(window);
-	text->init(*textShader);
 	text->setText("test");
 	text->setPosition(vec2(0.f, 0.f));
+	text2->setText("test2");
+	text2->setPosition(vec2(300.f, 300.f));
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window))
 	{
