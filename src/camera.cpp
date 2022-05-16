@@ -27,7 +27,9 @@ void Camera::update()
 
 void Camera::move(vec3 delta)
 {
-	_position += delta;
+	vec3 deltaInLocalSpace = delta.z * _direction + delta.y * vec3(0, 1, 0) +
+		delta.x * glm::cross(_direction, vec3(0, 1, 0));
+	_position += deltaInLocalSpace;
 	_recalcNeeded = true;
 }
 

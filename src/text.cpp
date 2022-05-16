@@ -54,7 +54,6 @@ void Text::draw(const Camera& camera, const Shader& shader)
         glDrawArrays(GL_TRIANGLES, 0, 6);
         pos.x += (ch.advance >> 6) * _scale;
     }
-    std::cout << pos.x << std::endl;
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     printOpenGLErrorIfAny();
