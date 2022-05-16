@@ -45,7 +45,7 @@ private:
 	vec2 _position = vec2(0, 0);
 	vec3 _color = vec3(1, 1, 1);
 	float _scale = 1;
-	std::string _text;
+	std::string _text = "";
 
 	static void initializeVertexArray();
 
@@ -54,5 +54,6 @@ public:
 	void draw(const Camera& camera, const Shader& shader);
 	void setPosition(vec2 position);
 	void setText(const std::string& text);
+	void setScale(float scale);
 };
 

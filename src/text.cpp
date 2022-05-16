@@ -54,6 +54,7 @@ void Text::draw(const Camera& camera, const Shader& shader)
         glDrawArrays(GL_TRIANGLES, 0, 6);
         pos.x += (ch.advance >> 6) * _scale;
     }
+    std::cout << pos.x << std::endl;
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     printOpenGLErrorIfAny();
@@ -67,6 +68,11 @@ void Text::setPosition(vec2 position)
 void Text::setText(const std::string& text)
 {
     _text = text;
+}
+
+void Text::setScale(float scale)
+{
+    _scale = scale;
 }
 
 inline void Text::GlyphDatabase::init()

@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <numeric>
 
 #include "definitions.h"
 #include "shader.h"
@@ -28,7 +29,6 @@ std::unique_ptr<DrawableObject> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
-std::unique_ptr<Text> text2;
 
 void freeResources()
 {
@@ -50,7 +50,6 @@ void initResources()
 	chemirailObject2 = std::make_unique<DrawableObject>("assets/models/untitled.obj");
 	chemirailObject2->move(vec3(2, 0, 0));
 	text = std::make_unique<Text>();
-	text2 = std::make_unique<Text>();
 }
 
 void errorCallback(int error, const char* description)
@@ -87,13 +86,14 @@ void draw(GLFWwindow* window, float timeDelta)
 	camera->set2DRotation(cameraInput);
 	camera->update();
 
+	text->setText(std::to_string(static_cast<int>(round(1.f / timeDelta))));
+
 	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
 	chemirailObject->draw(*camera, *simple);
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
 	chemirailObject2->draw(*camera, *simple);
 
 	text->draw(*camera, *textShader);
-	text2->draw(*camera, *textShader);
 
 	glfwSwapBuffers(window);
 }
@@ -128,10 +128,8 @@ int main(void)
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window.getWindow()));
 	Mouse::lockCursor(window.getWindow());
 
-	text->setText("test");
-	text->setPosition(vec2(0.f, 0.f));
-	text2->setText("test2");
-	text2->setPosition(vec2(300.f, 300.f));
+	text->setPosition(vec2(0.f, 460.f));
+	text->setScale(0.5f);
 
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window.getWindow()))
