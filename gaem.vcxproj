@@ -26,6 +26,7 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\mouse.cpp" />
     <ClCompile Include="src\drawableObject.cpp" />
+    <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\vertexArray.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\mouse.h" />
     <ClInclude Include="src\drawableObject.h" />
+    <ClInclude Include="src\resources.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\text.h" />
     <ClInclude Include="src\util.h" />

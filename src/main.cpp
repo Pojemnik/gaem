@@ -20,9 +20,8 @@
 #include "util.h"
 #include "text.h"
 #include "window.h"
+#include "resources.h"
 
-std::unique_ptr<Shader> exampleLambert;
-std::unique_ptr<Shader> exampleConstant;
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
 std::unique_ptr<DrawableObject> chemirailObject;
@@ -37,8 +36,6 @@ void freeResources()
 
 void initResources()
 {
-	exampleLambert = std::make_unique<Shader>("src/shaders/example/f_lambert.glsl", "src/shaders/example/v_lambert.glsl");
-	exampleConstant = std::make_unique<Shader>("src/shaders/example/f_constant.glsl", "src/shaders/example/v_constant.glsl");
 	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
 	textShader = std::make_unique<Shader>("src/shaders/f_text.glsl", "src/shaders/v_text.glsl");
 	textShader->use();
@@ -46,8 +43,9 @@ void initResources()
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
 		GLFW_KEY_D, GLFW_KEY_ESCAPE };
 	Keyboard::addTrackedKeys(trackedKeys);
-	chemirailObject = std::make_unique<DrawableObject>("assets/models/untitled.obj");
-	chemirailObject2 = std::make_unique<DrawableObject>("assets/models/untitled.obj");
+	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
+	chemirailObject = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
+	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
 	chemirailObject2->move(vec3(2, 0, 0));
 	text = std::make_unique<Text>();
 }

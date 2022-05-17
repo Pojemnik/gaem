@@ -1,7 +1,7 @@
 #include "drawableObject.h"
 
-DrawableObject::DrawableObject(std::string file)
-	: _vertexArray(file), _matrix(1.0f) {}
+DrawableObject::DrawableObject(const VertexArray& vertexArray)
+	: _vertexArray(vertexArray), _matrix(1.0f) {}
 
 void DrawableObject::rotate(float angle, vec3 axis)
 {

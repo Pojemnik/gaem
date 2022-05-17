@@ -13,10 +13,10 @@ class DrawableObject : public Drawable
 {
 private:
 	mat4 _matrix;
-	const VertexArray _vertexArray;
+	const VertexArray& _vertexArray;
 
 public:
-	DrawableObject(std::string file);
+	DrawableObject(const VertexArray& vertexArray);
 	void rotate(float angle, vec3 axis);
 	void rotateDeg(float angle, vec3 axis);
 	void move(vec3 direction);

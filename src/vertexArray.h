@@ -21,6 +21,7 @@ private:
 		BufferType type, int size);
 
 public:
+	VertexArray() = default;
 	VertexArray(const std::string& filePath);
 	virtual ~VertexArray();
 	int getSize() const;
