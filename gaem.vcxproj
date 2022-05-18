@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lodepng\lodepng.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
@@ -28,11 +29,13 @@
     <ClCompile Include="src\drawableObject.cpp" />
     <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\vertexArray.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lodepng\lodepng.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\drawable.h" />
@@ -44,6 +47,7 @@
     <ClInclude Include="src\drawableObject.h" />
     <ClInclude Include="src\resources.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\skybox.h" />
     <ClInclude Include="src\text.h" />
     <ClInclude Include="src\util.h" />
     <ClInclude Include="src\vertexArray.h" />
@@ -56,8 +60,10 @@
     <None Include="src\shaders\example\v_constant.glsl" />
     <None Include="src\shaders\example\v_lambert.glsl" />
     <None Include="src\shaders\f_simple.glsl" />
+    <None Include="src\shaders\f_skybox.glsl" />
     <None Include="src\shaders\f_text.glsl" />
     <None Include="src\shaders\v_simple.glsl" />
+    <None Include="src\shaders\v_skybox.glsl" />
     <None Include="src\shaders\v_text.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -120,12 +126,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\WorkingDir\gaem\lodepng;C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\WorkingDir\gaem\lib;C:\WorkingDir\gaem\glfw\lib;C:\WorkingDir\gaem\glew\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\WorkingDir\gaem\lodepng;C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;C:\WorkingDir\gaem\glm\gtx;C:\WorkingDir\gaem\glm\gtc;C:\WorkingDir\gaem\glm;C:\WorkingDir\gaem\glew\include;C:\WorkingDir\gaem\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\WorkingDir\gaem\lib;C:\WorkingDir\gaem\glfw\lib;C:\WorkingDir\gaem\glew\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -163,7 +169,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\lodepng;C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -182,7 +188,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkingDir\gaem\lodepng;C:\WorkingDir\gaem\src;C:\WorkingDir\gaem\tiny_obj_loader;glfw\include;glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

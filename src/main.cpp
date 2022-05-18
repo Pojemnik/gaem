@@ -21,13 +21,16 @@
 #include "text.h"
 #include "window.h"
 #include "resources.h"
+#include "skybox.h"
 
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
+std::unique_ptr<Shader> skyboxShader;
 std::unique_ptr<DrawableObject> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
+std::unique_ptr<Skybox> skybox;
 
 void freeResources()
 {
@@ -38,6 +41,7 @@ void initResources()
 {
 	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
 	textShader = std::make_unique<Shader>("src/shaders/f_text.glsl", "src/shaders/v_text.glsl");
+	skyboxShader = std::make_unique<Shader>("src/shaders/f_skybox.glsl", "src/shaders/v_skybox.glsl");
 	textShader->use();
 	glEnable(GL_DEPTH_TEST);
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
@@ -48,6 +52,16 @@ void initResources()
 	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
 	chemirailObject2->move(vec3(2, 0, 0));
 	text = std::make_unique<Text>();
+	std::vector<std::string> skyboxFilenames =
+	{
+		"assets/textures/skybox/humble_rt.png",
+		"assets/textures/skybox/humble_lf.png",
+		"assets/textures/skybox/humble_up.png",
+		"assets/textures/skybox/humble_dn.png",
+		"assets/textures/skybox/humble_ft.png",
+		"assets/textures/skybox/humble_bk.png"
+	};
+	skybox = std::make_unique<Skybox>(skyboxFilenames);
 }
 
 void errorCallback(int error, const char* description)
@@ -93,6 +107,8 @@ void draw(GLFWwindow* window, float timeDelta)
 
 	text->draw(*camera, *textShader);
 
+	skybox->draw(*camera, *skyboxShader);
+
 	glfwSwapBuffers(window);
 }
 
@@ -105,7 +121,7 @@ int main(void)
 		return 1;
 	}
 
-	Window window(glm::vec2(640, 480), "Gaem");
+	Window window(glm::vec2(1200, 900), "Gaem");
 	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f, window);
 	GLenum glewInitResult = glewInit();
 	if (glewInitResult != GLEW_OK)
@@ -126,7 +142,7 @@ int main(void)
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window.getWindow()));
 	Mouse::lockCursor(window.getWindow());
 
-	text->setPosition(vec2(0.f, 460.f));
+	text->setPosition(vec2(0.f, 880.f));
 	text->setScale(0.5f);
 
 	glfwSetTime(0);
