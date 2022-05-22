@@ -105,9 +105,9 @@ void draw(GLFWwindow* window, float timeDelta)
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
 	chemirailObject2->draw(*camera, *simple);
 
-	text->draw(*camera, *textShader);
-
 	skybox->draw(*camera, *skyboxShader);
+
+	text->draw(*camera, *textShader);
 
 	glfwSwapBuffers(window);
 }
