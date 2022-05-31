@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <iostream>
 
 #include "vertexArray.h"
 class Resources

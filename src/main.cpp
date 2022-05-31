@@ -28,6 +28,7 @@ std::unique_ptr<Shader> textShader;
 std::unique_ptr<Shader> skyboxShader;
 std::unique_ptr<DrawableObject> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
+std::unique_ptr<DrawableObject> rock;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
 std::unique_ptr<Skybox> skybox;
@@ -48,8 +49,11 @@ void initResources()
 		GLFW_KEY_D, GLFW_KEY_ESCAPE };
 	Keyboard::addTrackedKeys(trackedKeys);
 	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
+	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
 	chemirailObject = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
 	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
+	rock = std::make_unique<DrawableObject>(Resources::getVertexArray("block_2x2_2"));
+	rock->move(vec3(5, 2, 0));
 	chemirailObject2->move(vec3(2, 0, 0));
 	text = std::make_unique<Text>();
 	std::vector<std::string> skyboxFilenames =
@@ -104,6 +108,7 @@ void draw(GLFWwindow* window, float timeDelta)
 	chemirailObject->draw(*camera, *simple);
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
 	chemirailObject2->draw(*camera, *simple);
+	rock->draw(*camera, *simple);
 
 	skybox->draw(*camera, *skyboxShader);
 
