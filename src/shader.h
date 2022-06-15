@@ -31,6 +31,7 @@ public:
 	Shader(std::string fragmentPath, std::string vertexPath);
 	void setUniformMatrix(const std::string& name, const mat4& mat) const;
 	void setUniform3f(const std::string& name, const vec3 val) const;
+	void setUniform1i(const std::string& name, GLuint value) const;
 	void enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size) const;
 	void disableAttributeArray(const std::string& name) const;
 	void use() const;

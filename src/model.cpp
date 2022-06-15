@@ -29,7 +29,6 @@ Model::Model(std::string path)
 
 	auto& attrib = reader.GetAttrib();
 	auto& shapes = reader.GetShapes();
-	auto& materials = reader.GetMaterials();
 
 	for (size_t s = 0; s < shapes.size(); s++) {
 		size_t index_offset = 0;

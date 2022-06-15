@@ -11,3 +11,15 @@ void Resources::addVertexArray(std::string name, std::string path)
 	_verticesMap.emplace(name, path);
 	std::cout << "completed" << std::endl;
 }
+
+const Texture& Resources::getTexture(std::string name)
+{
+	return (const Texture&)_texturesMap[name];
+}
+
+void Resources::addTexture(std::string name, std::string path)
+{
+	std::cout << "Loading texture " << name << " from " << path << "..." << std::endl;
+	_texturesMap.emplace(name, path);
+	std::cout << "completed" << std::endl;
+}

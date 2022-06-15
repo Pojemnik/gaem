@@ -22,6 +22,9 @@ VertexArray::VertexArray(const std::string& filePath)
 	bindBuffer(_normalBuffer, model.getLength(BufferType::NORMAL),
 		model.getVector(BufferType::NORMAL), BufferType::NORMAL,
 		model.getSize(BufferType::NORMAL));
+	bindBuffer(_texCoordBuffer, model.getLength(BufferType::TEXCOORD),
+		model.getVector(BufferType::TEXCOORD), BufferType::TEXCOORD,
+		model.getSize(BufferType::TEXCOORD));
 	_size = model.getLength(BufferType::NORMAL);
 	glBindVertexArray(0);
 }

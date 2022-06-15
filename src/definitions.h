@@ -10,5 +10,7 @@ enum class BufferType : int
 	VERTEX = 0,
 	NORMAL,
 	TEXCOORD,
-	COLOR
+	COLOR,
+	TANGENT,
+	BITANGENT
 };

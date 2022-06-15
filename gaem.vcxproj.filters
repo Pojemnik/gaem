@@ -57,6 +57,9 @@
     <ClCompile Include="lodepng\lodepng.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\texture.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\shader.h">
@@ -113,6 +116,9 @@
     <ClInclude Include="lodepng\lodepng.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\texture.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\example\f_lambert.glsl">
@@ -143,6 +149,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="src\shaders\v_skybox.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\f_flat.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="src\shaders\v_flat.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>

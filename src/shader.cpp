@@ -18,13 +18,14 @@ GLuint Shader::loadShader(GLenum shaderType, const std::string& path) const
 	glCompileShader(handler);
 
 	int success;
-	std::string info;
 	glGetShaderiv(handler, GL_COMPILE_STATUS, &success);
 
 	if (!success)
 	{
-		glGetShaderInfoLog(handler, 512, NULL, info.data());
-		std::cout << "Shader compilation failed:\n" << info << std::endl;
+		std::string info;
+		char c[512];
+		glGetShaderInfoLog(handler, 512, NULL, c);
+		std::cout << "Shader compilation failed:\n" << c << std::endl;
 	}
 	return handler;
 }
@@ -65,6 +66,12 @@ void Shader::setUniform3f(const std::string& name, const vec3 val) const
 	glUniform3f(location, val.x, val.y, val.z);
 }
 
+void Shader::setUniform1i(const std::string& name, GLuint value) const
+{
+	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());
+	glUniform1i(location, value);
+}
+
 void Shader::enableAndSetAttributeArray(const std::string& name, const std::vector<float>& val, int size) const
 {
 	const GLuint location = glGetAttribLocation(_shaderHandler, name.c_str());
@@ -93,7 +100,7 @@ Shader::~Shader()
 	glDetachShader(_shaderHandler, _fragmentHandler);
 
 	glDeleteShader(_vertexHandler);
-	if (_geometryHandler != -1) 
+	if (_geometryHandler != -1)
 	{
 		glDeleteShader(_geometryHandler);
 	}

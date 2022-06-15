@@ -5,7 +5,6 @@ Skybox::Skybox(std::vector<std::string> paths)
     glGenTextures(1, &_texture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, _texture);
 
-    int width, height, nrChannels;
     for (unsigned int i = 0; i < paths.size(); i++)
     {
         std::vector<unsigned char> image;

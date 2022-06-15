@@ -29,7 +29,18 @@ void DrawableObject::draw(const Camera& camera, const Shader& shader)
 	shader.setUniformMatrix("M", _matrix);
 	shader.setUniformMatrix("P", camera.getPerspectiveMatrix());
 	shader.setUniformMatrix("V", camera.getViewMatrix());
+	if (_textures.size() > 0)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _textures[0]->getTexture());
+		shader.setUniform1i("textureMap0", 0);
+	}
 	glBindVertexArray(_vertexArray.getArray());
 	glDrawArrays(GL_TRIANGLES, 0, _vertexArray.getSize());
 	glBindVertexArray(0);
+}
+
+void DrawableObject::addTexture(std::shared_ptr<Texture> texture)
+{
+	_textures.push_back(texture);
 }

@@ -26,12 +26,13 @@
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
 std::unique_ptr<Shader> skyboxShader;
+std::unique_ptr<Shader> light;
 std::unique_ptr<DrawableObject> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
-std::unique_ptr<DrawableObject> rock;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
 std::unique_ptr<Skybox> skybox;
+std::vector<DrawableObject> staticObjects;
 
 void freeResources()
 {
@@ -43,18 +44,22 @@ void initResources()
 	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
 	textShader = std::make_unique<Shader>("src/shaders/f_text.glsl", "src/shaders/v_text.glsl");
 	skyboxShader = std::make_unique<Shader>("src/shaders/f_skybox.glsl", "src/shaders/v_skybox.glsl");
-	textShader->use();
+	light = std::make_unique<Shader>("src/shaders/f_flat.glsl", "src/shaders/v_flat.glsl");
 	glEnable(GL_DEPTH_TEST);
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
 		GLFW_KEY_D, GLFW_KEY_ESCAPE };
 	Keyboard::addTrackedKeys(trackedKeys);
 	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
 	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
+	Resources::addTexture("rock", "assets/textures/rock.png");
 	chemirailObject = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
 	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
-	rock = std::make_unique<DrawableObject>(Resources::getVertexArray("block_2x2_2"));
-	rock->move(vec3(5, 2, 0));
+	staticObjects.emplace_back(Resources::getVertexArray("block_2x2_2"));
+	staticObjects.back().move(vec3(0, -2, 0));
+	staticObjects.back().addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+	chemirailObject->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
 	chemirailObject2->move(vec3(2, 0, 0));
+	chemirailObject->move(vec3(0, 2, 0));
 	text = std::make_unique<Text>();
 	std::vector<std::string> skyboxFilenames =
 	{
@@ -107,8 +112,11 @@ void draw(GLFWwindow* window, float timeDelta)
 	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
 	chemirailObject->draw(*camera, *simple);
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
-	chemirailObject2->draw(*camera, *simple);
-	rock->draw(*camera, *simple);
+	chemirailObject2->draw(*camera, *light);
+	for (auto& it : staticObjects)
+	{
+		it.draw(*camera, *light);
+	}
 
 	skybox->draw(*camera, *skyboxShader);
 
@@ -127,7 +135,7 @@ int main(void)
 	}
 
 	Window window(glm::vec2(1200, 900), "Gaem");
-	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 2.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f, window);
+	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 0.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f, window);
 	GLenum glewInitResult = glewInit();
 	if (glewInitResult != GLEW_OK)
 	{
