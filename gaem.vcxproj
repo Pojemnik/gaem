@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="lodepng\lodepng.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\collider.cpp" />
+    <ClCompile Include="src\component.cpp" />
     <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -28,16 +30,20 @@
     <ClCompile Include="src\mouse.cpp" />
     <ClCompile Include="src\drawableObject.cpp" />
     <ClCompile Include="src\resources.cpp" />
+    <ClCompile Include="src\rigidbody.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\vertexArray.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lodepng\lodepng.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\collider.h" />
+    <ClInclude Include="src\component.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\drawable.h" />
     <ClInclude Include="src\ft2build.h" />
@@ -47,10 +53,12 @@
     <ClInclude Include="src\mouse.h" />
     <ClInclude Include="src\drawableObject.h" />
     <ClInclude Include="src\resources.h" />
+    <ClInclude Include="src\rigidbody.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\skybox.h" />
     <ClInclude Include="src\text.h" />
     <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\transform.h" />
     <ClInclude Include="src\util.h" />
     <ClInclude Include="src\vertexArray.h" />
     <ClInclude Include="src\window.h" />

@@ -22,12 +22,13 @@
 #include "window.h"
 #include "resources.h"
 #include "skybox.h"
+#include "transform.h"
 
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
 std::unique_ptr<Shader> skyboxShader;
 std::unique_ptr<Shader> light;
-std::unique_ptr<DrawableObject> chemirailObject;
+std::unique_ptr<Transform> chemirailObject;
 std::unique_ptr<DrawableObject> chemirailObject2;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> text;
@@ -52,14 +53,22 @@ void initResources()
 	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
 	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
 	Resources::addTexture("rock", "assets/textures/rock.png");
-	chemirailObject = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
+	chemirailObject = std::make_unique<Transform>(vec3(0, 0, 0),
+		std::make_shared<DrawableObject>(Resources::getVertexArray("chemirail")));
 	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
-	staticObjects.emplace_back(Resources::getVertexArray("block_2x2_2"));
-	staticObjects.back().move(vec3(0, -2, 0));
-	staticObjects.back().addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
-	chemirailObject->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+	float offset = 5;
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			staticObjects.emplace_back(Resources::getVertexArray("block_2x2_2"));
+			staticObjects.back().move(vec3(i * offset, -2, j * offset));
+			staticObjects.back().addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+		}
+	}
+	chemirailObject->getDrawable()->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
 	chemirailObject2->move(vec3(2, 0, 0));
-	chemirailObject->move(vec3(0, 2, 0));
+	chemirailObject->moveTo(vec3(0, 2, 0));
 	text = std::make_unique<Text>();
 	std::vector<std::string> skyboxFilenames =
 	{
@@ -109,8 +118,8 @@ void draw(GLFWwindow* window, float timeDelta)
 
 	text->setText(std::to_string(static_cast<int>(round(1.f / timeDelta))));
 
-	chemirailObject->rotate(timeDelta, vec3(0, 1, 0));
-	chemirailObject->draw(*camera, *simple);
+	chemirailObject->rotateDeg(timeDelta * 60, vec3(0, 1, 0));
+	chemirailObject->getDrawable()->draw(*camera, *simple);
 	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
 	chemirailObject2->draw(*camera, *light);
 	for (auto& it : staticObjects)
@@ -144,7 +153,7 @@ int main(void)
 	}
 	initResources();
 
-	
+
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
