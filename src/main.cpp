@@ -67,8 +67,8 @@ void initResources()
 		"assets/textures/skybox/humble_lf.png",
 		"assets/textures/skybox/humble_up.png",
 		"assets/textures/skybox/humble_dn.png",
-		"assets/textures/skybox/humble_ft.png",
-		"assets/textures/skybox/humble_bk.png"
+		"assets/textures/skybox/humble_bk.png",
+		"assets/textures/skybox/humble_ft.png"
 	};
 	skybox = std::make_unique<Skybox>(skyboxFilenames);
 }
