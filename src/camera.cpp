@@ -33,6 +33,12 @@ void Camera::move(vec3 delta)
 	_recalcNeeded = true;
 }
 
+void Camera::moveTo(vec3 target)
+{
+	_position = target;
+	_recalcNeeded = true;
+}
+
 void Camera::set2DRotation(vec2 inputVector)
 {
 	_rotation.yaw += inputVector.x;

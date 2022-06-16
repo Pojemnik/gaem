@@ -2,15 +2,21 @@
 #include <memory>
 
 #include "definitions.h"
-#include "component.h"
 
-class Collider : public Component
+class Collider
 {
 private:
-	vec3 _halfExtend;
+	float _up;
+	float _down;
+	float _right;
+	float _left;
+	float _front;
+	float _back;
 
 public:
-	Collider(vec3 halfExtend, Transform& transform);
-	vec3 getHalfExtend() const;
+	Collider(vec3 halfExtend, vec3 position);
+	void move(vec3 delta);
+	bool collides(vec3 point) const;
+	vec3 solveY(vec3 point) const;
 };
 

@@ -22,7 +22,6 @@
     <ClCompile Include="lodepng\lodepng.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\collider.cpp" />
-    <ClCompile Include="src\component.cpp" />
     <ClCompile Include="src\inputAdapter.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -43,7 +42,6 @@
     <ClInclude Include="lodepng\lodepng.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\collider.h" />
-    <ClInclude Include="src\component.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\drawable.h" />
     <ClInclude Include="src\ft2build.h" />

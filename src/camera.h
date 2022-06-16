@@ -39,6 +39,7 @@ public:
 		const Window& window, vec3 up = vec3(0, 1, 0));
 	void update();
 	void move(vec3 delta);
+	void moveTo(vec3 target);
 	void set2DRotation(vec2 inputVector);
 	mat4 getOrthoMatrix() const;
 	mat4 getViewMatrix() const;

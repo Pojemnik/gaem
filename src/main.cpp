@@ -23,17 +23,19 @@
 #include "resources.h"
 #include "skybox.h"
 #include "transform.h"
+#include "rigidbody.h"
 
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
 std::unique_ptr<Shader> skyboxShader;
-std::unique_ptr<Shader> light;
-std::unique_ptr<Transform> chemirailObject;
-std::unique_ptr<DrawableObject> chemirailObject2;
+std::unique_ptr<Shader> flat;
 std::unique_ptr<Camera> camera;
-std::unique_ptr<Text> text;
+std::unique_ptr<Text> fpsCounter;
 std::unique_ptr<Skybox> skybox;
-std::vector<DrawableObject> staticObjects;
+std::vector<Transform> staticObjects;
+std::vector<Collider*> colliders;
+std::unique_ptr<Rigidbody> playerRB;
+std::unique_ptr<Transform> playerTransform;
 
 void freeResources()
 {
@@ -45,31 +47,30 @@ void initResources()
 	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
 	textShader = std::make_unique<Shader>("src/shaders/f_text.glsl", "src/shaders/v_text.glsl");
 	skyboxShader = std::make_unique<Shader>("src/shaders/f_skybox.glsl", "src/shaders/v_skybox.glsl");
-	light = std::make_unique<Shader>("src/shaders/f_flat.glsl", "src/shaders/v_flat.glsl");
+	flat = std::make_unique<Shader>("src/shaders/f_flat.glsl", "src/shaders/v_flat.glsl");
 	glEnable(GL_DEPTH_TEST);
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
-		GLFW_KEY_D, GLFW_KEY_ESCAPE };
+		GLFW_KEY_D, GLFW_KEY_ESCAPE, GLFW_KEY_SPACE };
 	Keyboard::addTrackedKeys(trackedKeys);
 	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
 	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
 	Resources::addTexture("rock", "assets/textures/rock.png");
-	chemirailObject = std::make_unique<Transform>(vec3(0, 0, 0),
-		std::make_shared<DrawableObject>(Resources::getVertexArray("chemirail")));
-	chemirailObject2 = std::make_unique<DrawableObject>(Resources::getVertexArray("chemirail"));
+	playerRB = std::make_unique<Rigidbody>(0.2f);
+	playerTransform = std::make_unique<Transform>(vec3(0,0,0));
 	float offset = 5;
 	for (int i = -1; i < 2; i++)
 	{
 		for (int j = -1; j < 2; j++)
 		{
-			staticObjects.emplace_back(Resources::getVertexArray("block_2x2_2"));
-			staticObjects.back().move(vec3(i * offset, -2, j * offset));
-			staticObjects.back().addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+			vec3 pos = vec3(i * offset, -2, j * offset);
+			staticObjects.emplace_back(pos);
+			staticObjects.back().createDrawableObject(Resources::getVertexArray("block_2x2_2"));
+			staticObjects.back().getDrawableObject()->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+			staticObjects.back().createCollider(vec3(2, 1, 2), pos);
+			colliders.push_back(&*staticObjects.back().getCollider());
 		}
 	}
-	chemirailObject->getDrawable()->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
-	chemirailObject2->move(vec3(2, 0, 0));
-	chemirailObject->moveTo(vec3(0, 2, 0));
-	text = std::make_unique<Text>();
+	fpsCounter = std::make_unique<Text>();
 	std::vector<std::string> skyboxFilenames =
 	{
 		"assets/textures/skybox/humble_rt.png",
@@ -94,42 +95,48 @@ void draw(GLFWwindow* window, float timeDelta)
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (Keyboard::isKeyPressed(GLFW_KEY_W))
+	if (Keyboard::isKeyPressed(GLFW_KEY_SPACE))
 	{
-		camera->move(glm::vec3(0, 0, 1) * timeDelta);
+		if (playerRB->isColliding())
+		{
+			playerRB->addVelocity(glm::vec3(0, 1, 0) * 0.1f);
+		}
 	}
-	if (Keyboard::isKeyPressed(GLFW_KEY_S))
-	{
-		camera->move(glm::vec3(0, 0, -1) * timeDelta);
-	}
-	if (Keyboard::isKeyPressed(GLFW_KEY_A))
-	{
-		camera->move(glm::vec3(-1, 0, 0) * timeDelta);
-	}
-	if (Keyboard::isKeyPressed(GLFW_KEY_D))
-	{
-		camera->move(glm::vec3(1, 0, 0) * timeDelta);
-	}
+	//if (Keyboard::isKeyPressed(GLFW_KEY_W))
+	//{
+	//	camera->move(glm::vec3(0, 0, 1) * timeDelta);
+	//}
+	//if (Keyboard::isKeyPressed(GLFW_KEY_S))
+	//{
+	//	camera->move(glm::vec3(0, 0, -1) * timeDelta);
+	//}
+	//if (Keyboard::isKeyPressed(GLFW_KEY_A))
+	//{
+	//	camera->move(glm::vec3(-1, 0, 0) * timeDelta);
+	//}
+	//if (Keyboard::isKeyPressed(GLFW_KEY_D))
+	//{
+	//	camera->move(glm::vec3(1, 0, 0) * timeDelta);
+	//}
 	Mouse::updateMousePosition(window);
-	vec2 cursorDelta = Mouse::getCursorDelta() * timeDelta;
+	vec2 cursorDelta = Mouse::getCursorDelta() * 0.02f;
 	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
+	playerRB->update(timeDelta, colliders, *playerTransform);
+	camera->moveTo(playerTransform->getPosition() + vec3(0,1,0));
+	//std::cout << "Position: " << playerTransform->getPosition() << std::endl;
 	camera->set2DRotation(cameraInput);
 	camera->update();
 
-	text->setText(std::to_string(static_cast<int>(round(1.f / timeDelta))));
+	fpsCounter->setText(std::to_string(static_cast<int>(round(1.f / timeDelta))));
 
-	chemirailObject->rotateDeg(timeDelta * 60, vec3(0, 1, 0));
-	chemirailObject->getDrawable()->draw(*camera, *simple);
-	chemirailObject2->rotate(-timeDelta, vec3(0, 1, 0));
-	chemirailObject2->draw(*camera, *light);
 	for (auto& it : staticObjects)
 	{
-		it.draw(*camera, *light);
+		it.getDrawable()->draw(*camera, *flat);
 	}
 
 	skybox->draw(*camera, *skyboxShader);
 
-	text->draw(*camera, *textShader);
+	fpsCounter->draw(*camera, *textShader);
 
 	glfwSwapBuffers(window);
 }
@@ -164,8 +171,8 @@ int main(void)
 	Keyboard::addKeyPressedListener(GLFW_KEY_ESCAPE, "ESCAPE_CURSOR_CALLBACK", std::bind(Mouse::unlockCursor, window.getWindow()));
 	Mouse::lockCursor(window.getWindow());
 
-	text->setPosition(vec2(0.f, 880.f));
-	text->setScale(0.5f);
+	fpsCounter->setPosition(vec2(0.f, 880.f));
+	fpsCounter->setScale(0.5f);
 
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window.getWindow()))
