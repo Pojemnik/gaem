@@ -25,6 +25,12 @@
 #include "transform.h"
 #include "rigidbody.h"
 
+const float MAX_PLAYER_SPEED = 5.F;
+const float PLAYER_ACCELERATION = 30.F;
+const float GRAVITY = 12.F;
+const float PLAYER_FRICTION = 20.F;
+const float PLAYER_JUMP_FORCE = 12.F;
+
 std::unique_ptr<Shader> simple;
 std::unique_ptr<Shader> textShader;
 std::unique_ptr<Shader> skyboxShader;
@@ -55,7 +61,7 @@ void initResources()
 	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
 	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
 	Resources::addTexture("rock", "assets/textures/rock.png");
-	playerRB = std::make_unique<Rigidbody>(0.2f);
+	playerRB = std::make_unique<Rigidbody>(GRAVITY, PLAYER_FRICTION, MAX_PLAYER_SPEED);
 	playerTransform = std::make_unique<Transform>(vec3(0,0,0));
 	float offset = 5;
 	for (int i = -1; i < 2; i++)
@@ -99,31 +105,34 @@ void draw(GLFWwindow* window, float timeDelta)
 	{
 		if (playerRB->isColliding())
 		{
-			playerRB->addVelocity(glm::vec3(0, 1, 0) * 0.1f);
+			playerRB->addVelocity(glm::vec3(0, 1, 0) * PLAYER_JUMP_FORCE);
 		}
 	}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_W))
-	//{
-	//	camera->move(glm::vec3(0, 0, 1) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_S))
-	//{
-	//	camera->move(glm::vec3(0, 0, -1) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_A))
-	//{
-	//	camera->move(glm::vec3(-1, 0, 0) * timeDelta);
-	//}
-	//if (Keyboard::isKeyPressed(GLFW_KEY_D))
-	//{
-	//	camera->move(glm::vec3(1, 0, 0) * timeDelta);
-	//}
+	if (Keyboard::isKeyPressed(GLFW_KEY_W))
+	{
+		playerRB->addVelocity(camera->getDirectionOnPlane() * timeDelta * 1.f * PLAYER_ACCELERATION);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_S))
+	{
+		playerRB->addVelocity(camera->getDirectionOnPlane() * timeDelta * -1.f * PLAYER_ACCELERATION);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_A))
+	{
+		vec3 forward = camera->getDirectionOnPlane();
+		vec3 right = glm::cross(forward, vec3(0, 1, 0));
+		playerRB->addVelocity(right * timeDelta * -1.f * PLAYER_ACCELERATION);
+	}
+	if (Keyboard::isKeyPressed(GLFW_KEY_D))
+	{
+		vec3 forward = camera->getDirectionOnPlane();
+		vec3 right = glm::cross(forward, vec3(0, 1, 0));
+		playerRB->addVelocity(right * timeDelta * 1.f * PLAYER_ACCELERATION);
+	}
 	Mouse::updateMousePosition(window);
 	vec2 cursorDelta = Mouse::getCursorDelta() * 0.02f;
 	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
 	playerRB->update(timeDelta, colliders, *playerTransform);
 	camera->moveTo(playerTransform->getPosition() + vec3(0,1,0));
-	//std::cout << "Position: " << playerTransform->getPosition() << std::endl;
 	camera->set2DRotation(cameraInput);
 	camera->update();
 
@@ -151,7 +160,7 @@ int main(void)
 	}
 
 	Window window(glm::vec2(1200, 900), "Gaem");
-	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 0.f), glm::radians(50.f), 1.0f, 0.01f, 50.0f, window);
+	camera = std::make_unique<Camera>(vec3(0.f, 0.f, 0.f), glm::radians(50.f), 1.0f, 0.01f, 500.0f, window);
 	GLenum glewInitResult = glewInit();
 	if (glewInitResult != GLEW_OK)
 	{

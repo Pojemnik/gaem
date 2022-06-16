@@ -2,6 +2,8 @@
 #include <glm.hpp>
 #include <rotate_vector.hpp>
 
+#include <iostream>
+
 #include "definitions.h"
 #include "shader.h"
 #include "window.h"
@@ -41,6 +43,8 @@ public:
 	void move(vec3 delta);
 	void moveTo(vec3 target);
 	void set2DRotation(vec2 inputVector);
+	vec3 getDirectionOnPlane() const;
+	vec3 convertToLocalOnPlane(vec3 globalDirection) const;
 	mat4 getOrthoMatrix() const;
 	mat4 getViewMatrix() const;
 	mat4 getPerspectiveMatrix() const;

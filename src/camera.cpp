@@ -59,6 +59,22 @@ void Camera::set2DRotation(vec2 inputVector)
 	_recalcNeeded = true;
 }
 
+vec3 Camera::getDirectionOnPlane() const
+{
+	vec3 onPlane(0);
+	onPlane.x = _direction.x;
+	onPlane.z = _direction.z;
+	return glm::normalize(onPlane);
+}
+
+vec3 Camera::convertToLocalOnPlane(vec3 globalDirection) const
+{
+	vec3 local(0);
+	local = _direction * globalDirection.z + 
+		globalDirection.x * glm::cross(_direction, vec3(0, 1, 0));
+	return glm::normalize(local);
+}
+
 mat4 Camera::getOrthoMatrix() const
 {
 	return _ortho;
