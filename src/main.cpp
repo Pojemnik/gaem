@@ -8,6 +8,8 @@
 #include <string>
 #include <functional>
 #include <numeric>
+#include <random>
+#include <algorithm>
 
 #include "definitions.h"
 #include "shader.h"
@@ -52,6 +54,64 @@ void freeResources()
 
 }
 
+void createPlatofrm(vec3 pos)
+{
+	staticObjects.emplace_back(pos);
+	staticObjects.back().createDrawableObject(Resources::getVertexArray("block_2x2_2"));
+	staticObjects.back().getDrawableObject()->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
+	staticObjects.back().createCollider(vec3(2, 1, 2), pos);
+	colliders.push_back(&*staticObjects.back().getCollider());
+}
+
+void createStar(vec3& pos)
+{
+	stars.emplace_back(pos);
+	stars.back().createDrawableObject(Resources::getVertexArray("star"));
+	stars.back().getDrawableObject()->scale(vec3(0.15f));
+}
+
+void generateMap(int platforms, int starPercent)
+{
+	float offset = 5;
+	std::vector<int> v(81);
+	std::iota(v.begin(), v.end(), 0);
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(v.begin(), v.end(), g);
+	createPlatofrm(vec3(0, -2, 0));
+	for (int i = 0; i < platforms; i++)
+	{
+		int x = v[i] / 10 - 4;
+		int y = v[i] % 10 - 4;
+		if (x == 0 && y == 0)
+		{
+			continue;
+		}
+		vec3 pos = vec3(x * offset, -2 + (g() % 14) / 10.f - 0.7f, y * offset);
+		createPlatofrm(pos);
+		if (g() % 100 < starPercent)
+		{
+			vec3 starPos = pos + vec3(((g() % 31) / 10.f) - 1.5f, 2.5f + ((g() % 10) / 10.f) - 0.5f, ((g() % 31) / 10.f) - 1.5f);
+			std::cout << pos << std::endl;
+			std::cout << starPos << std::endl;
+			createStar(starPos);
+		}
+	}
+}
+
+void generateDefaultMap()
+{
+	float offset = 5;
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			vec3 pos = vec3(i * offset, -2, j * offset);
+			createPlatofrm(pos);
+		}
+	}
+}
+
 void initResources()
 {
 	simple = std::make_unique<Shader>("src/shaders/f_simple.glsl", "src/shaders/v_simple.glsl");
@@ -67,23 +127,7 @@ void initResources()
 	Resources::addTexture("rock", "assets/textures/rock.png");
 	playerRB = std::make_unique<Rigidbody>(GRAVITY, PLAYER_FRICTION, MAX_PLAYER_SPEED);
 	playerTransform = std::make_unique<Transform>(vec3(0, 0, 0));
-	float offset = 5;
-	for (int i = -1; i < 2; i++)
-	{
-		for (int j = -1; j < 2; j++)
-		{
-			vec3 pos = vec3(i * offset, -2, j * offset);
-			staticObjects.emplace_back(pos);
-			staticObjects.back().createDrawableObject(Resources::getVertexArray("block_2x2_2"));
-			staticObjects.back().getDrawableObject()->addTexture(std::make_shared<Texture>(Resources::getTexture("rock")));
-			staticObjects.back().createCollider(vec3(2, 1, 2), pos);
-			colliders.push_back(&*staticObjects.back().getCollider());
-		}
-	}
-
-	stars.emplace_back(vec3(5, 1, 3));
-	stars.back().createDrawableObject(Resources::getVertexArray("star"));
-	stars.back().getDrawableObject()->scale(vec3(0.15f));
+	generateMap(50, 50);
 
 	fpsCounter = std::make_unique<Text>();
 	scoreCounter = std::make_unique<Text>();
@@ -160,9 +204,9 @@ void draw(GLFWwindow* window, float timeDelta)
 		stars[i].moveRelative(vec3(0.5f, 0, 2));
 		stars[i].rotateDeg(60.f * timeDelta, vec3(0, 1, 0));
 		stars[i].moveRelative(vec3(-0.5f, 0, -2));
-		stars[i].getDrawable()->draw(*camera, *simple, vec4(1,1,0,1));
+		stars[i].getDrawable()->draw(*camera, *simple, vec4(1, 1, 0, 1));
 		float distance = glm::length(stars[i].getPosition() - cameraPos);
-		if (distance < 0.5f)
+		if (distance < 1.f)
 		{
 			toRemove.push_back(i);
 			score++;
@@ -216,7 +260,7 @@ int main(void)
 	fpsCounter->setPosition(vec2(0.f, 880.f));
 	fpsCounter->setScale(0.5f);
 
-	scoreCounter->setPosition(vec2(1100.f, 880.f));
+	scoreCounter->setPosition(vec2(1050.f, 880.f));
 	scoreCounter->setScale(0.5f);
 	scoreCounter->setText("Score: " + std::to_string(score));
 
