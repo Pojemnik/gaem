@@ -25,7 +25,7 @@ VertexArray::VertexArray(const std::string& filePath)
 	bindBuffer(_texCoordBuffer, model.getLength(BufferType::TEXCOORD),
 		model.getVector(BufferType::TEXCOORD), BufferType::TEXCOORD,
 		model.getSize(BufferType::TEXCOORD));
-	_size = model.getLength(BufferType::NORMAL);
+	_size = model.getLength(BufferType::VERTEX) * 3 / 4;
 	glBindVertexArray(0);
 }
 

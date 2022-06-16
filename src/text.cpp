@@ -21,11 +21,11 @@ void Text::initializeVertexArray()
     glBindVertexArray(0);
 }
 
-void Text::draw(const Camera& camera, const Shader& shader)
+void Text::draw(const Camera& camera, const Shader& shader, vec4 color)
 {
     shader.use();
     shader.setUniformMatrix("P", camera.getOrthoMatrix());
-    shader.setUniform3f("textColor", _color);
+    shader.setUniform3f("textColor", vec3(color));
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_VAO);
     vec2 pos = _position;

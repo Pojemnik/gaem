@@ -66,6 +66,12 @@ void Shader::setUniform3f(const std::string& name, const vec3 val) const
 	glUniform3f(location, val.x, val.y, val.z);
 }
 
+void Shader::setUniform4f(const std::string& name, const vec4 val) const
+{
+	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());
+	glUniform4f(location, val.x, val.y, val.z, val.w);
+}
+
 void Shader::setUniform1i(const std::string& name, GLuint value) const
 {
 	const GLuint location = glGetUniformLocation(_shaderHandler, name.c_str());

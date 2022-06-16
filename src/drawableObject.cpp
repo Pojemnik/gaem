@@ -23,7 +23,7 @@ void DrawableObject::scale(vec3 coef)
 	_matrix = glm::scale(_matrix, coef);
 }
 
-void DrawableObject::draw(const Camera& camera, const Shader& shader)
+void DrawableObject::draw(const Camera& camera, const Shader& shader, vec4 color)
 {
 	shader.use();
 	shader.setUniformMatrix("M", _matrix);
@@ -34,6 +34,10 @@ void DrawableObject::draw(const Camera& camera, const Shader& shader)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _textures[0]->getTexture());
 		shader.setUniform1i("textureMap0", 0);
+	}
+	if (color != vec4(0, 0, 0, 0))
+	{
+		shader.setUniform4f("color", color);
 	}
 	glBindVertexArray(_vertexArray.getArray());
 	glDrawArrays(GL_TRIANGLES, 0, _vertexArray.getSize());

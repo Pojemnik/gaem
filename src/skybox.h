@@ -62,6 +62,6 @@ private:
 
 public:
     Skybox(std::vector<std::string> paths);
-    void draw(const Camera& camera, const Shader& shader);
+    void draw(const Camera& camera, const Shader& shader, vec4 color = vec4(0,0,0,0));
 };
 

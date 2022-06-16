@@ -139,18 +139,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\example\f_lambert.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="src\shaders\example\v_lambert.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="src\shaders\example\f_constant.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="src\shaders\example\v_constant.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
     <None Include="src\shaders\f_simple.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>

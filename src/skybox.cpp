@@ -37,7 +37,7 @@ Skybox::Skybox(std::vector<std::string> paths)
     glBindVertexArray(0);
 }
 
-void Skybox::draw(const Camera& camera, const Shader& shader)
+void Skybox::draw(const Camera& camera, const Shader& shader, vec4 color)
 {
     glDepthFunc(GL_LEQUAL);
     shader.use();

@@ -63,10 +63,6 @@
     <ClInclude Include="tiny_obj_loader\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\example\f_constant.glsl" />
-    <None Include="src\shaders\example\f_lambert.glsl" />
-    <None Include="src\shaders\example\v_constant.glsl" />
-    <None Include="src\shaders\example\v_lambert.glsl" />
     <None Include="src\shaders\f_flat.glsl" />
     <None Include="src\shaders\f_simple.glsl" />
     <None Include="src\shaders\f_skybox.glsl" />

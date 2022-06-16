@@ -24,7 +24,7 @@ public:
 	void rotateDeg(float angle, vec3 axis);
 	void move(vec3 direction);
 	void scale(vec3 coef);
-	void draw(const Camera& camera, const Shader& shader);
+	void draw(const Camera& camera, const Shader& shader, vec4 color = vec4(0, 0, 0, 0));
 	void addTexture(std::shared_ptr<Texture> texture);
 };
 

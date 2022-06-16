@@ -37,11 +37,15 @@ std::unique_ptr<Shader> skyboxShader;
 std::unique_ptr<Shader> flat;
 std::unique_ptr<Camera> camera;
 std::unique_ptr<Text> fpsCounter;
+std::unique_ptr<Text> scoreCounter;
 std::unique_ptr<Skybox> skybox;
 std::vector<Transform> staticObjects;
 std::vector<Collider*> colliders;
 std::unique_ptr<Rigidbody> playerRB;
 std::unique_ptr<Transform> playerTransform;
+std::vector<Transform> stars;
+
+int score = 0;
 
 void freeResources()
 {
@@ -58,11 +62,11 @@ void initResources()
 	std::vector<int> trackedKeys{ GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A,
 		GLFW_KEY_D, GLFW_KEY_ESCAPE, GLFW_KEY_SPACE };
 	Keyboard::addTrackedKeys(trackedKeys);
-	Resources::addVertexArray("chemirail", "assets/models/untitled.obj");
 	Resources::addVertexArray("block_2x2_2", "assets/models/stone_block_2x2_2.obj");
+	Resources::addVertexArray("star", "assets/models/star.obj");
 	Resources::addTexture("rock", "assets/textures/rock.png");
 	playerRB = std::make_unique<Rigidbody>(GRAVITY, PLAYER_FRICTION, MAX_PLAYER_SPEED);
-	playerTransform = std::make_unique<Transform>(vec3(0,0,0));
+	playerTransform = std::make_unique<Transform>(vec3(0, 0, 0));
 	float offset = 5;
 	for (int i = -1; i < 2; i++)
 	{
@@ -76,7 +80,13 @@ void initResources()
 			colliders.push_back(&*staticObjects.back().getCollider());
 		}
 	}
+
+	stars.emplace_back(vec3(5, 1, 3));
+	stars.back().createDrawableObject(Resources::getVertexArray("star"));
+	stars.back().getDrawableObject()->scale(vec3(0.15f));
+
 	fpsCounter = std::make_unique<Text>();
+	scoreCounter = std::make_unique<Text>();
 	std::vector<std::string> skyboxFilenames =
 	{
 		"assets/textures/skybox/humble_rt.png",
@@ -132,7 +142,8 @@ void draw(GLFWwindow* window, float timeDelta)
 	vec2 cursorDelta = Mouse::getCursorDelta() * 0.02f;
 	vec2 cameraInput = InputAdapter::mouseDeltaToCameraInput(cursorDelta);
 	playerRB->update(timeDelta, colliders, *playerTransform);
-	camera->moveTo(playerTransform->getPosition() + vec3(0,1,0));
+	vec3 cameraPos = playerTransform->getPosition() + vec3(0, 1, 0);
+	camera->moveTo(cameraPos);
 	camera->set2DRotation(cameraInput);
 	camera->update();
 
@@ -143,9 +154,31 @@ void draw(GLFWwindow* window, float timeDelta)
 		it.getDrawable()->draw(*camera, *flat);
 	}
 
+	std::vector<int> toRemove;
+	for (int i = 0; i < stars.size(); i++)
+	{
+		stars[i].moveRelative(vec3(0.5f, 0, 2));
+		stars[i].rotateDeg(60.f * timeDelta, vec3(0, 1, 0));
+		stars[i].moveRelative(vec3(-0.5f, 0, -2));
+		stars[i].getDrawable()->draw(*camera, *simple, vec4(1,1,0,1));
+		float distance = glm::length(stars[i].getPosition() - cameraPos);
+		if (distance < 0.5f)
+		{
+			toRemove.push_back(i);
+			score++;
+			scoreCounter->setText("Score: " + std::to_string(score));
+		}
+	}
+
+	for (const auto& it : toRemove)
+	{
+		stars.erase(stars.begin() + it);
+	}
+
 	skybox->draw(*camera, *skyboxShader);
 
 	fpsCounter->draw(*camera, *textShader);
+	scoreCounter->draw(*camera, *textShader);
 
 	glfwSwapBuffers(window);
 }
@@ -182,6 +215,10 @@ int main(void)
 
 	fpsCounter->setPosition(vec2(0.f, 880.f));
 	fpsCounter->setScale(0.5f);
+
+	scoreCounter->setPosition(vec2(1100.f, 880.f));
+	scoreCounter->setScale(0.5f);
+	scoreCounter->setText("Score: " + std::to_string(score));
 
 	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window.getWindow()))
